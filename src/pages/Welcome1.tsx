@@ -1,11 +1,9 @@
-import c from 'classnames'
-import s from './Welcome1.module.scss'
+import p from '../assets/images/welcome1.svg'
 export const Welcome1: React.FC = () => {
   return (
-    <div className={c(s.wrapper, s.blue)}>
-      <div className='frank'>
-      山竹记账
-      </div>
+    <div text-center>
+      <img src={p} />
+      <h2 text-center mt-10px>每日提醒 <br /> 不会遗漏每一笔账单</h2>
     </div>
   )
 }
