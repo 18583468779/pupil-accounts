@@ -1,8 +1,9 @@
 import { animated, useTransition } from '@react-spring/web'
-import { ReactNode, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import { useRef } from 'react'
-import { Link, useLocation, useOutlet } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useOutlet } from 'react-router-dom'
 import logo from '../assets/images/logo.svg'
+import { useSwipe } from '../hooks/useSwipe'
 
 const linkMap: Record<string, string> = {
   '/welcome/1': '/welcome/2',
@@ -11,7 +12,9 @@ const linkMap: Record<string, string> = {
   '/welcome/4': '/welcome/xxx',
 }
 // linkMap 表驱动编程
+//当一个变量参与了ui的改造那么，使用useState，否者使用useRef
 export const WelcomeLayout: React.FC = () => {
+  const animating = useRef(false) //动画节流
   const map = useRef<Record<string, ReactNode>>({})
   const location = useLocation()
   const outlet = useOutlet()
@@ -27,16 +30,33 @@ export const WelcomeLayout: React.FC = () => {
       setExtraStyle({ position: 'absolute' })
     },
     onRest: () => {
+      animating.current = false
       setExtraStyle({ position: 'relative' })
     }
   })
+  //拿到main的元素，做滑动
+  const main = useRef<HTMLElement>(null);
+  //不能接受main.current，因为这个时候页面还没有挂载它的值肯定为null
+  const {direction}= useSwipe(main);
+  const nav = useNavigate()
+  useEffect(()=>{
+    if(direction === 'left'){
+      if(animating.current){return}
+      animating.current = true
+     nav(linkMap[location.pathname])
+    }
+  },[direction,location.pathname])
+
+  const onSkip =()=>{
+    localStorage.setItem('hasReadWelcomes','yes')
+  } 
   return (
    <div className='bg-#5f34bf h-screen flex flex-col justify-center items-strech pb-16px'>
     <header shrink-0 text-center pt-44px>
       <img src={logo} w-64px h-69px/>
       <h1 text="#D4D4EE">小学生记账</h1>
     </header>
-    <main shrink-1 grow-1 relative>
+    <main shrink-1 grow-1 relative ref={main}>
         {transitions((style, pathname) =>
         <animated.div key={pathname} style={{ ...style, ...extraStyle }} w="100%" h="100%" p-16px flex>
          <div grow-1 bg-white rounded-8px flex justify-center items-center>
@@ -47,7 +67,7 @@ export const WelcomeLayout: React.FC = () => {
     </main>
     <footer shrink-0 text-center text-24px text-white grid grid-cols-3 grid-rows-1>
       <Link style={{ gridArea: '1 / 2 / 2 / 3' }} to={linkMap[location.pathname]} text-white>下一页</Link>
-      <Link style={{ gridArea: '1 / 3 / 2 / 4' }} to="/welcome/xxx" text-white>跳过</Link>
+      <Link style={{ gridArea: '1 / 3 / 2 / 4' }} to="/home" text-white onClick={onSkip}>跳过</Link>
     </footer>
    </div>
   )
