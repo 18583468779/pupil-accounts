@@ -12,9 +12,9 @@ const linkMap: Record<string, string> = {
   '/welcome/4': '/welcome/xxx',
 }
 // linkMap 表驱动编程
-//当一个变量参与了ui的改造那么，使用useState，否者使用useRef
+// 当一个变量参与了ui的改造那么，使用useState，否者使用useRef
 export const WelcomeLayout: React.FC = () => {
-  const animating = useRef(false) //动画节流
+  const animating = useRef(false) // 动画节流
   const map = useRef<Record<string, ReactNode>>({})
   const location = useLocation()
   const outlet = useOutlet()
@@ -34,14 +34,14 @@ export const WelcomeLayout: React.FC = () => {
       setExtraStyle({ position: 'relative' })
     }
   })
-  //拿到main的元素，做滑动
-  const main = useRef<HTMLElement>(null);
-  //不能接受main.current，因为这个时候页面还没有挂载它的值肯定为null
-  const {direction}= useSwipe(main);
+  // 拿到main的元素，做滑动
+  const main = useRef<HTMLElement>(null)
+  // 不能接受main.current，因为这个时候页面还没有挂载它的值肯定为null
+  const {direction}= useSwipe(main)
   const nav = useNavigate()
   useEffect(()=>{
     if(direction === 'left'){
-      if(animating.current){return}
+      if (animating.current) {return}
       animating.current = true
      nav(linkMap[location.pathname])
     }
