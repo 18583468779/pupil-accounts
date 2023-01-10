@@ -2,8 +2,8 @@ import axios from "axios";
 
 axios.defaults.baseURL = isDev ? '/' : 'http://121.196.236.94:8080/api/v1'
 export const ajax = {
-  get: (path:string) => {
-    return axios.get(path);
+  get: <T>(path:string) => {
+    return axios.get<T>(path);
   },
   post: (path:string) => {
     return axios.post(path);

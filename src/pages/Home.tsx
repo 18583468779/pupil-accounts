@@ -3,18 +3,33 @@ import useSWR from 'swr'
 import p from "../assets/images/pig.svg";
 import add from "../assets/images/add.svg";
 import { ajax } from "../lib/ajax";
-export const Home: React.FC = () => {
+import { Navigate } from "react-router-dom";
+import { useTitle } from "../hooks/useTitle";
 
+interface Props{
+  title:string
+}
+export const Home: React.FC<Props> = (props) => {
+ useTitle(props.title)
   //使用swr发送请求，不用在useEffect中使用，swr会自己处理
   const {data:meData,error:errorData} = useSWR('/api/v1/me',(path)=>{
     //判断用户是否登录
-    return ajax.get(`${path}`)
+    return ajax.get<Resource<User>>(`${path}`)
   })
   const {data:meItem,error:errorItem} = useSWR(meData ? '/api/v1/item' : null,(path)=>{
     //用户登录后发送请求
-    return ajax.get(`${path}`)
+    return ajax.get<Resources<Item>>(`${path}`)
   })
 
+ const isLoadingMe = !meData && !errorData
+ const isLoadingItems = meData && !meItem && !errorItem
+
+ if(isLoadingMe || isLoadingItems){
+  return <div>加载中</div>
+ }
+ if(meItem?.data.resources[0]){
+   return <Navigate to="/items"/>
+ }
   return (
     <div>
       <div flex justify-center items-center>

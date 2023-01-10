@@ -5,19 +5,35 @@ export default [
   {
     url: "/api/v1/me",
     method: "get",
-    response: () => {
+    timeout:1000,
+    response: ():Resource<User> => {
       return {
-        id: 1,
-        email: "1123654054@qq.com",
+        resource:{
+          id: 1,
+          email: "1123654054@qq.com",
+          created_at:"2022-09-01T00:00:00.000Z",
+          updated_at:"2022-09-01T00:00:00.000Z"
+        }
+        
       };
     },
   },
   {
     url: "/api/v1/item",
     method: "get",
-    response: () => {
+    response: ():Resources<Item> => {
       return {
-        resources: [],
+        resources: [{
+          id:1,
+          user_id:1,
+          amount:1000,
+          note:'note',
+          tag_ids:[1,2],
+          happen_at:"2022-09-01T00:00:00.000Z",
+          created_at:"2022-09-01T00:00:00.000Z",
+          updated_at:"2022-09-01T00:00:00.000Z",
+          kind:'expenses',
+        }],
         pager: {
           page: 1,
           per_page: 25,
