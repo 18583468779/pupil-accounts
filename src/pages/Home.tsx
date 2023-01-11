@@ -1,10 +1,12 @@
 import * as React from "react";
 import useSWR from 'swr'
 import p from "../assets/images/pig.svg";
-import add from "../assets/images/add.svg";
+
 import { ajax } from "../lib/ajax";
 import { Navigate } from "react-router-dom";
 import { useTitle } from "../hooks/useTitle";
+import { Loading } from "../components/Loding";
+import { AddItemFloatButton } from "../components/AddItemFloatButton";
 
 interface Props{
   title:string
@@ -25,7 +27,7 @@ export const Home: React.FC<Props> = (props) => {
  const isLoadingItems = meData && !meItem && !errorItem
 
  if(isLoadingMe || isLoadingItems){
-  return <div>加载中</div>
+  return <Loading />
  }
  if(meItem?.data.resources[0]){
    return <Navigate to="/items"/>
@@ -41,7 +43,7 @@ export const Home: React.FC<Props> = (props) => {
         </button>
       </div>
 
-      <button w-56px h-56px bg="#5c33be" rounded="50%" b-none text-white text-6xl text-center fixed bottom-16px right-16px><img src={add} w="100%"/> </button>
+      <AddItemFloatButton />
     </div>
   );
 };

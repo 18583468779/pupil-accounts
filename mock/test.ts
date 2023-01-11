@@ -5,7 +5,7 @@ export default [
   {
     url: "/api/v1/me",
     method: "get",
-    timeout:1000,
+    timeout:100,
     response: ():Resource<User> => {
       return {
         resource:{
@@ -22,24 +22,32 @@ export default [
     url: "/api/v1/item",
     method: "get",
     response: ():Resources<Item> => {
-      return {
-        resources: [{
-          id:1,
-          user_id:1,
-          amount:1000,
-          note:'note',
-          tag_ids:[1,2],
-          happen_at:"2022-09-01T00:00:00.000Z",
-          created_at:"2022-09-01T00:00:00.000Z",
-          updated_at:"2022-09-01T00:00:00.000Z",
-          kind:'expenses',
-        }],
+      return{
+        resources:[],
         pager: {
-          page: 1,
-          per_page: 25,
-          count: 100,
-        },
-      };
+              page: 1,
+              per_page: 25,
+              count: 0,
+            },
+      }
+      // return {
+      //   resources: [{
+      //     id:1,
+      //     user_id:1,
+      //     amount:1000,
+      //     note:'note',
+      //     tag_ids:[1,2],
+      //     happen_at:"2022-09-01T00:00:00.000Z",
+      //     created_at:"2022-09-01T00:00:00.000Z",
+      //     updated_at:"2022-09-01T00:00:00.000Z",
+      //     kind:'expenses',
+      //   }],
+      //   pager: {
+      //     page: 1,
+      //     per_page: 25,
+      //     count: 100,
+      //   },
+      // };
     },
   },
 ] as MockMethod[];
