@@ -49,7 +49,7 @@ export const ItemPages: React.FC = () => {
   //全局变量 === 全局的上下文
   // const [visible, setVisible] = useState(false);
 
-  const {visible} = useMenuStore()
+  const {visible,setVisible} = useMenuStore()
   return (
 
 
@@ -61,7 +61,7 @@ export const ItemPages: React.FC = () => {
         <ItemsSummary />
         <ItemsList items={items} />
         <AddItemFloatButton />
-        {visible ? <TopMenu /> : null}
+        <TopMenu onClickMask={()=>setVisible(false)} visible={visible}/> 
      
     </div>
   );
