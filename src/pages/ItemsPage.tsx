@@ -21,28 +21,6 @@ const Div = styled.div`
 //   setVisible: (visble: boolean) => {},
 // });
 export const ItemPages: React.FC = () => {
-  const [items] = useState<Item[]>([
-    {
-      id: 1,
-      kind: "incomes",
-      amount: 1000,
-      user_id: 1,
-      tag_ids: [1],
-      happen_at: "2021-08-01T00:00:00.000Z",
-      created_at: "2021-08-01T00:00:00.000Z",
-      updated_at: "2021-08-01T00:00:00.000Z",
-    },
-    {
-      id: 2,
-      kind: "incomes",
-      amount: 1000,
-      user_id: 1,
-      tag_ids: [1],
-      happen_at: "2021-08-01T00:00:00.000Z",
-      created_at: "2021-08-01T00:00:00.000Z",
-      updated_at: "2021-08-01T00:00:00.000Z",
-    },
-  ]);
 
   const [timeRange, setTimeRange] = useState<TimeRange>("thisMonth");
   //上下文 === 局部的全局变量
@@ -59,7 +37,7 @@ export const ItemPages: React.FC = () => {
           <TimeRangePicker selected={timeRange} onSelected={setTimeRange} />
         </Div>
         <ItemsSummary />
-        <ItemsList items={items} />
+        <ItemsList/>
         <AddItemFloatButton />
         <TopMenu onClickMask={()=>setVisible(false)} visible={visible}/> 
      
