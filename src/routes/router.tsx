@@ -2,7 +2,9 @@ import { createBrowserRouter } from 'react-router-dom'
 import { Root } from '../components/Root'
 import { WelcomeLayout } from '../layouts/WelcomeLayout'
 import { Home } from '../pages/Home'
-import { ItemPages } from '../pages/ItemsPage'
+import { ItemsNewPage } from '../pages/ItemsNewPage'
+import { ItemsPage } from '../pages/ItemsPage'
+import { SignInPage } from '../pages/SignInPage'
 import { Welcome1 } from '../pages/Welcome1'
 import { Welcome2 } from '../pages/Welcome2'
 import { Welcome3 } from '../pages/Welcome3'
@@ -21,10 +23,11 @@ export const router = createBrowserRouter([
       { path: '4', element: <Welcome4 /> },
     ]
   },
-  { path: '/items', element: <ItemPages /> },
-  { path: '/sign_in', element: <div>sign_in</div> },
-  { path: '/chart', element: <div>圖表</div> },
-  { path: '/export', element: <div>尽情期待</div> },
+  { path: '/items', element: <ItemsPage /> },
+  { path: '/items/new', element: <ItemsNewPage /> },
+  { path: '/sign_in', element: <SignInPage /> },
+  { path: '/chart', element: <div>图表</div> },
+  { path: '/export', element: <div>敬请期待</div> },
   { path: '/tags', element: <div>标签</div> },
-  { path: '/noty', element: <div>尽情期待</div> },
+  { path: '/noty', element: <div>敬请期待</div> },
 ])

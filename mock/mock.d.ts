@@ -1,3 +1,3 @@
-export type ResponseParams = {
-    query:Record<string,string>
+type ResponseParams = {
+  query: Record<string, string>
 }

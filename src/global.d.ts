@@ -1,4 +1,5 @@
 var isDev: boolean
+type JSONValue = string | number | boolean | null | { [k: string]: JSONValue } | JSONValue[]
 interface Resource<T> {
   resource: T
 }
@@ -26,6 +27,6 @@ interface Item {
   happen_at: string
   created_at: string
   updated_at: string
-  kind: 'expenses' | 'incomes'
+  kind: 'expenses' | 'income'
   deleted_at?: string
 }

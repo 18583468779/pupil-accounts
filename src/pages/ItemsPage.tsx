@@ -1,46 +1,32 @@
-import * as React from "react";
-import { useState } from "react";
-import styled from "styled-components";
-import { AddItemFloatButton } from "../components/AddItemFloatButton";
-import type { TimeRange } from "../components/TimeRangePicker";
-import { TimeRangePicker } from "../components/TimeRangePicker";
-import { TopMenu } from "../components/TopMenu";
-import { TopNav } from "../components/TopNav";
-import { useMenuStore } from "../stores/useMenuStore";
-import { ItemsList } from "./ItemsPage/ItemsList";
-import { ItemsSummary } from "./ItemsPage/ItemsSummary";
-const Div = styled.div`
-  background: rgb(143, 76, 215);
-  background: linear-gradient(
-    0deg,
-    rgba(143, 76, 215, 1) 0%,
-    rgba(92, 51, 190, 1) 100%
-  );
-`;
-// export const MenuContext = React.createContext({
-//   setVisible: (visble: boolean) => {},
-// });
-export const ItemPages: React.FC = () => {
+import React, { useState } from 'react'
+import { AddItemFloatButton } from '../components/AddItemFloatButton'
+import { Gradient } from '../components/Gradient'
+import { Icon } from '../components/Icon'
+import type { TimeRange } from '../components/TimeRangePicker'
+import { TimeRangePicker } from '../components/TimeRangePicker'
+import { TopMenu } from '../components/TopMenu'
+import { TopNav } from '../components/TopNav'
+import { useMenuStore } from '../stores/useMenuStore'
+import { ItemsList } from './ItemsPage/ItemsList'
+import { ItemsSummary } from './ItemsPage/ItemsSummary'
 
-  const [timeRange, setTimeRange] = useState<TimeRange>("thisMonth");
-  //上下文 === 局部的全局变量
-  //全局变量 === 全局的上下文
-  // const [visible, setVisible] = useState(false);
+export const ItemsPage: React.FC = () => {
+  const [timeRange, setTimeRange] = useState<TimeRange>('thisMonth')
+  const { visible, setVisible } = useMenuStore()
 
-  const {visible,setVisible} = useMenuStore()
   return (
-
-
     <div>
-        <Div>
-          <TopNav title="我的记账本" />
-          <TimeRangePicker selected={timeRange} onSelected={setTimeRange} />
-        </Div>
-        <ItemsSummary />
-        <ItemsList/>
-        <AddItemFloatButton />
-        <TopMenu onClickMask={()=>setVisible(false)} visible={visible}/> 
-     
+      <Gradient>
+        <TopNav title="账目列表" icon={
+          <Icon name="menu" className="w-24px h-24px"
+            onClick={() => { setVisible(!visible) }} />
+        } />
+      </Gradient>
+      <TimeRangePicker selected={timeRange} onSelect={setTimeRange} />
+      <ItemsSummary />
+      <ItemsList />
+      <AddItemFloatButton />
+      <TopMenu visible={visible} onClickMask={() => { setVisible(false) }} />
     </div>
-  );
-};
+  )
+}
