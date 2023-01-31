@@ -4,7 +4,7 @@ type Props = {
   kind: Item['kind']
 }
 export const Tags: React.FC<Props> = (props) => {
-  const { kind } = props
+  // const { kind } = props
   const tags = Array.from({ length: 91 })
   return (
     <div>
@@ -15,7 +15,7 @@ export const Tags: React.FC<Props> = (props) => {
             flex justify-center items-center text-24px text="#8F4CD7"
             ><Icon name="add" /></span>
         </li>
-        {tags.map((tag,index) =>
+        {tags.map((tag, index) =>
           <li key={index} w-48px flex justify-center items-center
             flex-col gap-y-8px>
             <span block w-48px h-48px rounded="24px" bg="#EFEFEF"

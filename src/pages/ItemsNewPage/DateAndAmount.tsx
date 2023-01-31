@@ -1,6 +1,5 @@
-import { useState } from 'react'
+import { Datepicker } from '../../components/Datepicker'
 import { Icon } from '../../components/Icon'
-import { Popup } from '../../components/Popup'
 import { usePopup } from '../../hooks/usePopup'
 
 type Props = {
@@ -8,53 +7,7 @@ type Props = {
 }
 export const DateAndAmount: React.FC<Props> = (props) => {
   const { className } = props
-  const [isTouching,setIsTouching] = useState(false)
-  const [lastY,setLastY] = useState(-1) //起始坐标
-  const [translateY,setTranslateY] = useState(0) //移动距离
-  const {popup,toggle} = usePopup(<div h="50vh" relative overflow-hidden
-    onTouchStart={(e)=>{
-      setIsTouching(true)
-      setLastY(e.touches[0].clientY)
-    }}
-    onTouchMove={(e)=>{
-      if(isTouching){
-       const y = e.touches[0].clientY
-       const dy = y - lastY; //移动的距离
-       setTranslateY(translateY + dy)
-       setLastY(y)
-      }
-    }}
-    onTouchEnd={()=>{
-      setIsTouching(false)
-    }}
-  >
-    <div w-full absolute b-1 b-red h-36px top="[calc(50%-18px)]" />
-    <div w-full absolute b-1 b-red h-36px top="[calc(50%-18px)]" >
-      <ol style={{transform:`translateY(${translateY}px)` }} children-h-36px text-center children-leading-36px>
-        <li>123</li>
-        <li>123</li>
-        <li>42343</li>
-        <li>345</li>
-        <li>356</li>
-        <li>456</li>
-        <li>456</li>
-        <li>234</li>
-        <li>234</li>
-        <li>234</li>
-        <li>123</li>
-        <li>123</li>
-        <li>42343</li>
-        <li>345</li>
-        <li>356</li>
-        <li>456</li>
-        <li>456</li>
-        <li>234</li>
-        <li>234</li>
-        <li>234</li>
-      </ol>
-    </div>
-
-  </div>);
+  const { popup, toggle } = usePopup(<Datepicker/>)
   return (
     <>
       <div className={className}>
@@ -90,7 +43,6 @@ export const DateAndAmount: React.FC<Props> = (props) => {
       </div>
      {popup}
     </>
-
 
   )
 }
