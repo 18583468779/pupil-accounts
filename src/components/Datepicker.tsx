@@ -1,15 +1,33 @@
 import * as React from 'react'
 import { useState } from 'react'
+import { time} from '../lib/time'
+
 type Props = {
-  strat?: Date
+  start?: Date
   end?: Date
   value?: Date
+  itemHeight?:number
 }
 export const Datepicker: React.FC<Props> = (props) => {
-  const {star,end,value} = props
+  const {start,end,value,itemHeight=36} = props
+  const startTime =start ? time(start) : time().add(-10,'year')
+  const endTime =end ? time(end) : time().add(10,'year')
+  const valueTime = value? time(value) : time();
+  if(endTime.timestamp <= startTime.timestamp){
+      throw new Error('结束时间必须晚于开始时间')
+  }
+
+  const yearList = Array.from({length:endTime.year- startTime.year +1}).map((_,index)=> startTime.year + index)
+  const index = yearList.indexOf(valueTime.year);
+  
   const [isTouching, setIsTouching] = useState(false)
   const [lastY, setLastY] = useState(-1) // 起始坐标
-  const [translateY, setTranslateY] = useState(0) // 移动距离
+  const [translateY, _setTranslateY] = useState(index * -itemHeight) // 移动距离
+  const setTranslateY = (y: number) => {
+    y = Math.min(y, 0)
+    y = Math.max(y, (yearList.length - 1) * -itemHeight)
+    _setTranslateY(y)
+  }
   return <div h="50vh" relative overflow-hidden
   onTouchStart={(e) => {
     setIsTouching(true)
@@ -24,38 +42,19 @@ export const Datepicker: React.FC<Props> = (props) => {
     }
   }}
   onTouchEnd={() => {
-    const remainder = translateY % 36
+    const remainder = translateY % itemHeight
     let y = translateY - remainder
-    if (Math.abs(remainder) < 18) {
-      y += 36 * (remainder > 0 ? 1 : -1)
+    if (Math.abs(remainder) > 18) {
+      y += itemHeight * (remainder > 0 ? 1 : -1)
     }
     setTranslateY(y)
     setIsTouching(false)
   }}
 >
-  <div w-full absolute b-1 b-red h-36px top="[calc(50%-18px)]" />
-  <div w-full absolute b-1 b-red h-36px top="[calc(50%-18px)]" >
-    <ol style={{ transform: `translateY(${translateY}px)` }} children-h-36px text-center children-leading-36px>
-      <li>123</li>
-      <li>123</li>
-      <li>42343</li>
-      <li>345</li>
-      <li>356</li>
-      <li>456</li>
-      <li>456</li>
-      <li>234</li>
-      <li>234</li>
-      <li>234</li>
-      <li>123</li>
-      <li>123</li>
-      <li>42343</li>
-      <li>345</li>
-      <li>356</li>
-      <li>456</li>
-      <li>456</li>
-      <li>234</li>
-      <li>234</li>
-      <li>234</li>
+  <div w-full absolute b-1 b-red top="[calc(50%-18px)]" style={{height:itemHeight}}/>
+  <div w-full absolute b-1 b-red  top="[calc(50%-18px)]" style={{height:itemHeight}}>
+    <ol style={{ transform: `translateY(${translateY}px)` }} text-center >
+     {yearList.map(year => <li key={year} style={{height:itemHeight,lineHeight:`${itemHeight}px`}}>{year}</li>)}
     </ol>
   </div>
 

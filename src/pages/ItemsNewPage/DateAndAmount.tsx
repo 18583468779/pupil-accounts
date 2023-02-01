@@ -1,6 +1,7 @@
 import { Datepicker } from '../../components/Datepicker'
 import { Icon } from '../../components/Icon'
 import { usePopup } from '../../hooks/usePopup'
+import { time } from '../../lib/time'
 
 type Props = {
   className?: string
@@ -14,7 +15,7 @@ export const DateAndAmount: React.FC<Props> = (props) => {
         <div flex p-16px border-t-1px border-t="#ddd" >
           <span onClick={toggle} items-center flex gap-x-8px>
             <Icon name="calendar" className='w-24px h-24px grow-0 shrink-0'/>
-            <span grow-0 shrink-0 text-12px color="#999"> 2022-02-03</span>
+            <span grow-0 shrink-0 text-12px color="#999"> {time().year}</span>
           </span>
             <code grow-1 shrink-1 text-right color='#53a867'>123456</code>
         </div>
