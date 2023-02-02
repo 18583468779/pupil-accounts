@@ -19,8 +19,12 @@ export class Time {
   date: Date
   constructor(p?: number | string | Date) {
     this.date = p ? new Date(p) : new Date()
+    
   }
 
+  get lastDayOfMonth(){
+    return new Time(new Date(this.year,this.month-1 + 1,0))
+  }
   add(n: number, unit: Unit) {
     const table = {
       year: 'year',
