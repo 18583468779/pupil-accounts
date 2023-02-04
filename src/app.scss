@@ -24,3 +24,8 @@ html{
 :focus {
   outline: none;
 }
+::-webkit-scrollbar{display: none;}
+
+.red{
+  color: #5c33be;
+}
