@@ -22,8 +22,9 @@ export const EmojiInput: React.FC<Props> = (props) => {
   </div>
   <div text-24px p-8px h-300px overflow-auto >
       {
-          emojis.map(emoji => <div flex flex-wrap style={{ display: emojiKind === emoji.name ? '' : 'none' }}>
-            {emoji.chars.map(char => <span b-1 b-transparent rounded='4px' text="center" w-34px className={char === value ? 'selected' : ''}
+          emojis.map(emoji => <div key={emoji.name} flex flex-wrap style={{ display: emojiKind === emoji.name ? '' : 'none' }}>
+            {emoji.chars.map(char => <span key={char} 
+            b-1 b-transparent rounded='4px' text="center" w-34px className={char === value ? 'selected' : ''}
              onClick={() => value !== char && onChange?.(char)}
             >{char}</span>)}
             </div>)
