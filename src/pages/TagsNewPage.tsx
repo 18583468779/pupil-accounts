@@ -5,7 +5,6 @@ import { TopNav } from '../components/TopNav'
 import { TagForm } from './TagsNewPage/TagForm'
 
 export const TagsNewPage: React.FC = () => {
-
   return (
     <div>
       <Gradient className="grow-0 shrink-0">
