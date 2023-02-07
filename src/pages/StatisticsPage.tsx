@@ -5,6 +5,8 @@ import type { TimeRange } from '../components/TimeRangePicker'
 import { TimeRangePicker } from '../components/TimeRangePicker'
 import { TopNav } from '../components/TopNav'
 import { LineChart } from '../components/LineChart'
+import { PieChart } from '../components/PieChart'
+import { RankChart } from '../components/RankChart'
 
 export const StatisticsPage: React.FC = () => {
   const [timeRange, setTimeRange] = React.useState<TimeRange>('thisMonth')
@@ -39,6 +41,15 @@ export const StatisticsPage: React.FC = () => {
     { data: '2000-01-28', value: 3500 },
     { data: '2000-01-29', value: 4500 },
   ].map(item => ({ x: item.data, y: item.value }))
+
+  const items2 = [
+    { data: '衣服', name: 1500 },
+    { data: '裤子', name: 500 },
+    { data: '手机', name: 3500 },
+    { data: '电脑', name: 4500 },
+    { data: '零食', name: 150 },
+
+  ].map(item => ({ x: item.data, y: item.name }))
   return (
  <div>
     <Gradient>
@@ -48,5 +59,7 @@ export const StatisticsPage: React.FC = () => {
     </Gradient>
     <TimeRangePicker selected={timeRange} onSelect={setTimeRange} />
     <LineChart className='h-120px' items={items}/>
+    <PieChart className='h-320px' items={items2}/>
+    <RankChart />
   </div>)
 }

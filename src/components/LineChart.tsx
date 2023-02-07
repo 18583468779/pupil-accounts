@@ -1,5 +1,7 @@
+
 import * as echarts from 'echarts'
 import * as React from 'react'
+
 import { useEffect, useRef } from 'react'
 type Props = {
   className?: string
@@ -15,7 +17,14 @@ export const LineChart: React.FC<Props> = (props) => {
     const myChart = echarts.init(div.current)
     myChart.setOption({
       tooltip: {
-        show: true
+        trigger:'axis',
+        show: true,
+        formatter:([{axisValue,data}]:any)=>{
+          const parts = axisValue.split('-')
+          const label = parts[0] + '年' + parts[1] + '月' + parts[2] + '日'
+          const _data = data === null ? '无数据' : data;
+          return `${label}<br/>${_data}元`
+        }
       },
       grid: {
         left: 16,
@@ -45,6 +54,11 @@ export const LineChart: React.FC<Props> = (props) => {
           type: 'line',
           itemStyle: {
             // color: 'red'
+          },
+          emphasis:{
+            itemStyle:{
+              color:'#009866'
+            }
           }
         }
       ]
