@@ -1,3 +1,4 @@
+import axios from 'axios'
 import type { FormEventHandler } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Gradient } from '../components/Gradient'
@@ -27,6 +28,24 @@ export const SignInPage: React.FC = () => {
       nav('/home')
     }
   }
+
+  const sendSmsCode = async()=>{
+    console.log(data.email)
+   const newError = validate({email:data.email},[
+      { key: 'email', type: 'pattern', regex: /^.+@.+$/, message: '邮箱地址格式不正确' }
+    ])
+    setError(newError)
+    if(hasError(newError)){
+        console.log(error)
+    }else{
+      //发送验证码
+      const response = await axios.post('http://121.196.236.94:8080/api/v1/validation_codes', {
+        email: data.email
+      })
+     return response
+      
+    }
+  }
   return (
     <div>
       <Gradient>
@@ -41,7 +60,11 @@ export const SignInPage: React.FC = () => {
           value={data.email} onChange={value => setData({ email: value })}
           error={error.email?.[0]}
         />
-        <Input type='sms_code' label='验证码' placeholder='六位数字' value={data.code} onChange={value => setData({ code: value })}/>
+        <Input type='sms_code' label='验证码' placeholder='六位数字' 
+          value={data.code} 
+          onChange={value => setData({ code: value })}
+          request={sendSmsCode}
+        />
         <div mt-100px>
           <button j-btn type="submit" >登录</button>
         </div>

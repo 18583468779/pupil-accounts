@@ -1,32 +1,38 @@
 import * as React from 'react'
 import type { ReactNode } from 'react'
 import { EmojiInput } from './Ipunt/EmojiInput'
+import { SmsCodeInput } from './Ipunt/SmsCodeInput'
 
 type Props = {
-  label: string | ReactNode
+  label?: string | ReactNode
   placeholder?: string
-  type?: 'text' | 'emoji' | 'sms_code'
   value?: string
   onChange?: (value: string) => void
   error?: string
-}
+  disableError?:boolean
+} & (
+  | {type:'text'} 
+  | {type:'emoji'} 
+  | {type:'sms_code';request?:()=>Promise<unknown>} 
+  | {type:'select'; options:{value:string;text:string}[]}
+ )
 export const Input: React.FC<Props> = (props) => {
-  const { label, placeholder, type = 'text', value, onChange, error } = props
+  const { label, placeholder, type, value, onChange, error,disableError } = props
   const renderInput = () => {
     switch (type) {
+      case undefined:
       case 'text':
         return <input j-input-text type={type} placeholder={placeholder}
      value={value} onChange={ e => onChange?.(e.target.value)} />
       case 'emoji':
         return <EmojiInput value={value} onChange={value => onChange?.(value)}/>
+      case  'select':
+        return  <select className='h-36px'  value={value}  onChange={ e => onChange?.(e.target.value)} >
+                      {props.options.map(option => <option key={option.value} value={option.value}>{option.text}</option>)}
+        </select>
       case 'sms_code':
         return (
-            <div flex gap-x-16px>
-            <input shrink-1 j-input-text type="text" placeholder={placeholder}
-              max-w="[calc(40%-8px)]"
-              value={value} onChange={e => onChange?.(e.target.value)} />
-            <button max-w="[calc(60%-8px)]" shrink-0 j-btn>发送验证码</button>
-          </div>
+          <SmsCodeInput value={value} placeholder={placeholder} request={props.request} onChange={onChange}/>
         )
       default:
         return null
@@ -38,7 +44,7 @@ export const Input: React.FC<Props> = (props) => {
             <span text='18px'>{label}</span>
             { renderInput()}
 
-            <span text-red text-12px>{ error || ' '}</span>
+            {disableError ? null : <span text-red text-12px>{ error || ' '}</span>}
         </div>
     </div>
   ) }

@@ -7,6 +7,8 @@ import { TopNav } from '../components/TopNav'
 import { LineChart } from '../components/LineChart'
 import { PieChart } from '../components/PieChart'
 import { RankChart } from '../components/RankChart'
+import { Input } from '../components/Input'
+import { useState } from 'react'
 
 export const StatisticsPage: React.FC = () => {
   const [timeRange, setTimeRange] = React.useState<TimeRange>('thisMonth')
@@ -53,6 +55,7 @@ export const StatisticsPage: React.FC = () => {
   const items2 = data.map(item => ({ x: item.tag.name, y: item.amount }))
 
   const items3 = data.map(item => ({ x: item.tag.name, y: item.tag.sign, z: item.amount }))
+  const [x,setX] = useState('expenses')
   return (
  <div>
     <Gradient>
@@ -61,8 +64,23 @@ export const StatisticsPage: React.FC = () => {
       } />
     </Gradient>
     <TimeRangePicker selected={timeRange} onSelect={setTimeRange} />
+    <div flex px-16px items-center gap-x-16px>
+      <span grow-0 shrink-0>类型：</span>
+      <div grow-1 shrink-1>
+        <Input type="select" 
+                options={[
+                  {text:'支出',value:'expenses'},
+                  {text:'收入',value:'income'}
+                ]}
+                  value={x}
+                  onChange={value => setX(value)}
+                  disableError
+        />
+      </div>
+
+    </div>
     <LineChart className='h-120px' items={items}/>
     <PieChart className='h-320px' items={items2}/>
-    <RankChart className='123' items={items3}/>
+    <RankChart className='h-40px' items={items3}/>
   </div>)
 }
