@@ -42,14 +42,17 @@ export const StatisticsPage: React.FC = () => {
     { data: '2000-01-29', value: 4500 },
   ].map(item => ({ x: item.data, y: item.value }))
 
-  const items2 = [
-    { data: '衣服', name: 1500 },
-    { data: '裤子', name: 500 },
-    { data: '手机', name: 3500 },
-    { data: '电脑', name: 4500 },
-    { data: '零食', name: 150 },
+  const data = [
+    { tag: { name: '衣服', sign: '😍' }, amount: 1500 },
+    { tag: { name: '裤子', sign: '😘' }, amount: 500 },
+    { tag: { name: '手机', sign: '😚' }, amount: 3500 },
+    { tag: { name: '电脑', sign: '😪' }, amount: 4500 },
+    { tag: { name: '零食', sign: '😵' }, amount: 150 },
 
-  ].map(item => ({ x: item.data, y: item.name }))
+  ]
+  const items2 = data.map(item => ({ x: item.tag.name, y: item.amount }))
+
+  const items3 = data.map(item => ({ x: item.tag.name, y: item.tag.sign, z: item.amount }))
   return (
  <div>
     <Gradient>
@@ -60,6 +63,6 @@ export const StatisticsPage: React.FC = () => {
     <TimeRangePicker selected={timeRange} onSelect={setTimeRange} />
     <LineChart className='h-120px' items={items}/>
     <PieChart className='h-320px' items={items2}/>
-    <RankChart />
+    <RankChart className='123' items={items3}/>
   </div>)
 }
