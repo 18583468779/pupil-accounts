@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import type { FormEventHandler } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Gradient } from '../components/Gradient'
@@ -6,44 +6,48 @@ import { Icon } from '../components/Icon'
 import { Input } from '../components/Input'
 import { TopNav } from '../components/TopNav'
 import { ajax } from '../lib/ajax'
-import { hasError, validate } from '../lib/validate'
+import { FormError, hasError, validate } from '../lib/validate'
 import { useSignInStore } from '../stores/useSignInStore'
 
 export const SignInPage: React.FC = () => {
   const { data, error, setData, setError } = useSignInStore()
   const nav = useNavigate()
+  const onSubmitError = (err: AxiosError<{ errors: FormError<typeof data> }>) => {
+    setError(err.response?.data?.errors ?? {})
+    throw error
+  }
   const onSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault()
-    const error = validate(data, [
+    const newError = validate(data, [
       { key: 'email', type: 'required', message: '请输入邮箱地址' },
       { key: 'email', type: 'pattern', regex: /^.+@.+$/, message: '邮箱地址格式不正确' },
       { key: 'code', type: 'required', message: '请输入验证码' },
       { key: 'code', type: 'length', min: 6, max: 6, message: '验证码必须是6个字符' },
     ])
-    setError(error)
-    if (!hasError(error)) {
-      await ajax.post('/api/v1/session', data)
-      // TODO
-      // 保存 JWT 作为登录凭证
+    setError(newError)
+    if (!hasError(newError)) {
+      const response = await ajax.post<{ jwt: string }>('http://121.196.236.94:8080/api/v1/session', data)
+        .catch(onSubmitError)
+      const jwt = response.data.jwt
+      console.log('jwt', jwt)
+      localStorage.setItem('jwt', jwt)
       nav('/home')
     }
   }
-
-  const sendSmsCode = async()=>{
-    console.log(data.email)
-   const newError = validate({email:data.email},[
+  const sendSmsCode = async () => {
+    const newError = validate({ email: data.email }, [
       { key: 'email', type: 'pattern', regex: /^.+@.+$/, message: '邮箱地址格式不正确' }
     ])
     setError(newError)
-    if(hasError(newError)){
-        console.log(error)
-    }else{
-      //发送验证码
+    if (hasError(newError)) {
+      console.log('有错')
+    } else {
+      console.log('没错')
+      // 请求
       const response = await axios.post('http://121.196.236.94:8080/api/v1/validation_codes', {
         email: data.email
       })
-     return response
-      
+      return response
     }
   }
   return (
