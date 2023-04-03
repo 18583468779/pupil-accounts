@@ -9,6 +9,7 @@ import { ajax } from "../lib/ajax";
 import { FormError, hasError, validate } from "../lib/validate";
 import { useSignInStore } from "../stores/useSignInStore";
 import { usePopup } from "../hooks/usePopup";
+import styled from "styled-components";
 
 export const SignInPage: React.FC = () => {
   const { data, error, setData, setError } = useSignInStore();
@@ -52,7 +53,15 @@ export const SignInPage: React.FC = () => {
       nav("/home");
     }
   };
-  const {popup,hide,show} = usePopup({children:<div>加载中</div>,position:"center"})
+  const Spin = styled(Icon)`
+    animation:spin 1s linear infinite;
+    @keyframes spin{
+      form{transform:rotate(0deg);}
+      to{transform:rotate(360deg);}
+    }
+
+  `
+  const {popup,hide,show} = usePopup({children:<div p-16px><Spin className="w-32px h-32px" name="loading"/></div>,position:"center"})
   const sendSmsCode = async () => {
     const newError = validate({ email: data.email }, [
       {
