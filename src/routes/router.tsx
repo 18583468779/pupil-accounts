@@ -15,6 +15,7 @@ import { Welcome3 } from '../pages/Welcome3'
 import { Welcome4 } from '../pages/Welcome4'
 import axios, { AxiosError } from 'axios'
 import { ItemsPageError } from '../pages/itemsPageError'
+import { ErrorPage } from '../pages/ErrorPage'
 
 export const router = createBrowserRouter([
   { path: '/', element: <Root />, },
@@ -50,7 +51,12 @@ export const router = createBrowserRouter([
       })
     }
   },
-  { path: '/items/new', element: <ItemsNewPage /> },
+  { 
+    path: '/items/new', 
+    element: <ItemsNewPage />,
+    errorElement: <ErrorPage />,
+    loader :async ()=> preload('/api/v1/me',(path) => axios.get<Resources<User>>(path).then(r => r.data,err=> {throw new Error('unauthorized')}))
+  },
   { path: '/tags/new', element: <TagsNewPage /> },
   { path: '/tags/:id', element: <TagsEditPage /> },
   { path: '/sign_in', element: <SignInPage /> },
