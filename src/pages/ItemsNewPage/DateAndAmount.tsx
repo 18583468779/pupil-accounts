@@ -10,10 +10,10 @@ type Props = {
 export const DateAndAmount: React.FC<Props> = (props) => {
   const [valueDate, setValueDate] = useState(time().date.toLocaleDateString())
   const { className } = props
-  const { popup, toggle, hide } = usePopup(<Datepicker
+  const { popup, toggle, hide } = usePopup({children:<Datepicker
     onConfirm={ (d) => { setValueDate(d.toLocaleDateString()); hide() }}
     onCancel={() => hide()}
-  />)
+  />})
   const [output, _setOutput] = useState('0')
   const setOutput = (char: string) => {
     // 设置拦截器，判断小数点后最多两位

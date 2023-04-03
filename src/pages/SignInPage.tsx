@@ -8,6 +8,7 @@ import { TopNav } from "../components/TopNav";
 import { ajax } from "../lib/ajax";
 import { FormError, hasError, validate } from "../lib/validate";
 import { useSignInStore } from "../stores/useSignInStore";
+import { usePopup } from "../hooks/usePopup";
 
 export const SignInPage: React.FC = () => {
   const { data, error, setData, setError } = useSignInStore();
@@ -51,6 +52,7 @@ export const SignInPage: React.FC = () => {
       nav("/home");
     }
   };
+  const {popup,hide,show} = usePopup({children:<div>加载中</div>,position:"center"})
   const sendSmsCode = async () => {
     const newError = validate({ email: data.email }, [
       {
@@ -61,22 +63,21 @@ export const SignInPage: React.FC = () => {
       },
     ]);
     setError(newError);
-    if (hasError(newError)) {
-      console.log("有错");
-    } else {
-      console.log("没错");
+    if (hasError(newError)) {throw new Error('表单出错')};
+
       // 请求
+      show();
       const response = await axios.post(
         "http://121.196.236.94:8080/api/v1/validation_codes",
         {
           email: data.email,
         }
-      );
-      return response;
-    }
+      ).finally(()=>{hide()});
+      return response; 
   };
   return (
     <div>
+      {popup}
       <Gradient>
         <TopNav title="登录" icon={<Icon name="back" />} />
       </Gradient>
