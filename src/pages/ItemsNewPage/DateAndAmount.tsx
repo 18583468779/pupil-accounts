@@ -1,19 +1,12 @@
-import { useState } from 'react'
-import { Datepicker } from '../../components/Datepicker'
-import { Icon } from '../../components/Icon'
-import { usePopup } from '../../hooks/usePopup'
-import { time } from '../../lib/time'
+import { ReactNode, useState } from 'react'
 
 type Props = {
   className?: string
+  ItemDate?:ReactNode
 }
 export const DateAndAmount: React.FC<Props> = (props) => {
-  const [valueDate, setValueDate] = useState(time().date.toLocaleDateString())
   const { className } = props
-  const { popup, toggle, hide } = usePopup({children:<Datepicker
-    onConfirm={ (d) => { setValueDate(d.toLocaleDateString()); hide() }}
-    onCancel={() => hide()}
-  />})
+
   const [output, _setOutput] = useState('0')
   const setOutput = (char: string) => {
     // 设置拦截器，判断小数点后最多两位
@@ -51,10 +44,7 @@ export const DateAndAmount: React.FC<Props> = (props) => {
     <>
       <div className={className}>
         <div flex p-16px border-t-1px border-t="#ddd" >
-          <span onClick={toggle} items-center flex gap-x-8px>
-            <Icon name="calendar" className='w-24px h-24px grow-0 shrink-0'/>
-            <span grow-0 shrink-0 text-12px color="#999"> {valueDate === new Date().toLocaleDateString() ? '今天' : valueDate}</span>
-          </span>
+            {props.ItemDate}
             <code grow-1 shrink-1 text-right color='#53a867'>{output}元</code>
         </div>
         <div py-1px className={className} grid
@@ -80,7 +70,7 @@ export const DateAndAmount: React.FC<Props> = (props) => {
           <button row-start-3 col-start-4 row-end-5 col-end-5 bg="#5c33be" color-white onClick={() => {}}>提交</button>
         </div>
       </div>
-     {popup}
+
     </>
 
   )
