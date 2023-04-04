@@ -27,7 +27,9 @@ export const ItemsNewPage: React.FC = () => {
         value={data.kind!}
         onChange={(tabItem) => { setData({kind:tabItem}) }} />
         <div>{JSON.stringify(data)}</div>
-      <ItemAmount className="grow-0 shrink-0" ItemDate={<ItemDate value={data.happen_at} onChange={(d)=>{setData({happen_at:d})}}/>} />
+      <ItemAmount className="grow-0 shrink-0" value={data.amount} onChange={(amount)=>{setData({amount})}}
+        ItemDate={<ItemDate value={data.happen_at} onChange={(d)=>{setData({happen_at:d})}}/>} 
+      />
     </div>
   )
 }
