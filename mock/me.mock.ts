@@ -1,6 +1,6 @@
 import type { MockMethod } from 'vite-plugin-mock'
 
-export const meMock: MockMethod = {
+export const meMock: MockMethod[] = [{
   url: '/api/v1/me',
   method: 'get',
   response: (): Resource<User> => {
@@ -13,7 +13,7 @@ export const meMock: MockMethod = {
       }
     }
   },
-}
+}]
 // export const meMock: MockMethod = {
 //   url: '/api/v1/me',
 //   statusCode:401,

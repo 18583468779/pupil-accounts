@@ -49,8 +49,6 @@ export const useAjax = (options:Options)=>{
         const fn = table[status];
         if(fn){
           fn()
-        }else{
-          window.alert('未知错误')
         }
       }
     }
