@@ -10,14 +10,16 @@ import { useCreateItemStore } from '../stores/useCreateItemStore'
 import { ItemDate } from './ItemsNewPage/ItemDate'
 import { hasError, validate } from '../lib/validate'
 import { useAjax } from '../lib/ajax'
+import { useNavigate } from 'react-router-dom'
+import { BackIcon } from '../components/BackIcon'
 
 export const ItemsNewPage: React.FC = () => {
   const {data,error,setData,setError} = useCreateItemStore();
   const tabItems: { key: Item['kind']; text: string; element?: ReactNode }[]= [
       { key: 'expenses', text: '支出', 
-        element: <Tags kind="expenses" value={data.tag_ids} onchange={(ids)=>setData({tag_ids:ids})} /> },
+        element: <Tags kind="expenses" value={data.tag_ids} onChange={(ids)=>setData({tag_ids:ids})} /> },
       { key: 'income', text: '收入', 
-        element: <Tags kind="income"  value={data.tag_ids} onchange={(ids)=>setData({tag_ids:ids})} /> }
+        element: <Tags kind="income"  value={data.tag_ids} onChange={(ids)=>setData({tag_ids:ids})} /> }
   ]
   const {post} = useAjax({showLoading:true,handleError:true})
   const onSubmit:FormEventHandler<HTMLFormElement> =async (e) =>{
@@ -38,10 +40,12 @@ export const ItemsNewPage: React.FC = () => {
      console.log(response.data.resource)
     }
   }
+
+
   return (
     <form className={s.wrapper} h-screen flex flex-col onSubmit={onSubmit}>
       <Gradient className="grow-0 shrink-0">
-        <TopNav title="记一笔" icon={<Icon name="back" />} />
+        <TopNav title="记一笔" icon={<BackIcon/>} />
       </Gradient>
       <Tabs tabItems={tabItems} className="text-center grow-1 shrink-1 overflow-hidden" classPrefix='itemsNewPage'
         value={data.kind!}

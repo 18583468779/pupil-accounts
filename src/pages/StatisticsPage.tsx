@@ -9,6 +9,7 @@ import { PieChart } from '../components/PieChart'
 import { RankChart } from '../components/RankChart'
 import { Input } from '../components/Input'
 import { useState } from 'react'
+import { BackIcon } from '../components/BackIcon'
 
 export const StatisticsPage: React.FC = () => {
   const [timeRange, setTimeRange] = React.useState<TimeRange>('thisMonth')
@@ -59,9 +60,7 @@ export const StatisticsPage: React.FC = () => {
   return (
  <div>
     <Gradient>
-      <TopNav title="账目列表" icon={
-        <Icon name="back" className="w-24px h-24px" />
-      } />
+      <TopNav title="账目列表" icon={<BackIcon className="w-24px h-24px" /> }  />
     </Gradient>
     <TimeRangePicker selected={timeRange} onSelect={setTimeRange} />
     <div flex px-16px items-center gap-x-16px>

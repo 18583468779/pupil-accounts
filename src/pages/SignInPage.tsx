@@ -10,6 +10,7 @@ import { FormError, hasError, validate } from "../lib/validate";
 import { useSignInStore } from "../stores/useSignInStore";
 import { useLoadingStore } from "../stores/useLoadingStore";
 import { useAjax } from "../lib/ajax";
+import { BackIcon } from "../components/BackIcon";
 
 export const SignInPage: React.FC = () => {
   const { data, error, setData, setError } = useSignInStore();
@@ -84,7 +85,7 @@ export const SignInPage: React.FC = () => {
   return (
     <div>
       <Gradient>
-        <TopNav title="登录" icon={<Icon name="back" />} />
+        <TopNav title="登录" icon={<BackIcon/>}/>
       </Gradient>
       <div text-center pt-40px pb-16px>
         <Icon name="logo" className="w-64px h-68px" />
