@@ -1,5 +1,5 @@
-import { faker } from "@faker-js/faker";
-import { MockMethod } from "vite-plugin-mock";
+import { faker } from '@faker-js/faker'
+import type { MockMethod } from 'vite-plugin-mock'
 
 let id = 0
 const createId = () => {
@@ -9,10 +9,10 @@ const createId = () => {
 const create = (attrs?: Partial<Tag>): Tag => {
   return {
     id: createId(),
-    name:'标签',
-    sign:faker.internet.emoji(),
+    name: faker.lorem.word(),
+    sign: faker.internet.emoji(),
     user_id: 1,
-    deleted_at:null,
+    deleted_at: null,
     created_at: faker.date.past().toISOString(),
     updated_at: faker.date.past().toISOString(),
     kind: 'expenses',
@@ -38,24 +38,37 @@ const createResponse = ({ count = 10, perPage = 10, page = 1 }, attrs?: Partial<
 }
 
 export const tagsMock: MockMethod[] = [{
-    url: '/api/v1/tags',
-    method: 'get',
-    statusCode: 200,
-    response: ({ query }: ResponseParams): Resources<Tag> =>{
-       return  createResponse({ count: 91, perPage: 50, page: parseInt(query.page) || 1 })
-    }
-  },
-  {
-    url: '/api/v1/tags',
-    method: 'post',
-    statusCode: 200,
-    response: ({ query }: ResponseParams): Resource<Tag> =>{
-       return  {
-        resource:create()
-       }
+  url: '/api/v1/tags',
+  method: 'get',
+  statusCode: 200,
+  response: ({ query }: ResponseParams): Resources<Tag> => {
+    return createResponse({ count: 54, perPage: 50, page: parseInt(query.page) || 1 })
+  }
+}, {
+  url: '/api/v1/tags',
+  method: 'post',
+  statusCode: 200,
+  response: ({ query }: ResponseParams): Resource<Tag> => {
+    return {
+      resource: create()
     }
   }
-
-
-]
-  
+}, {
+  url: '/api/v1/tags/:id',
+  method: 'patch',
+  statusCode: 200,
+  response: ({ query }: ResponseParams): Resource<Tag> => {
+    return {
+      resource: create()
+    }
+  }
+}, {
+  url: '/api/v1/tags/:id',
+  method: 'get',
+  statusCode: 200,
+  response: ({ query }: ResponseParams): Resource<Tag> => {
+    return {
+      resource: create()
+    }
+  }
+}]
