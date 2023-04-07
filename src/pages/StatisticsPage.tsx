@@ -16,7 +16,7 @@ import { time } from '../lib/time'
 export const StatisticsPage: FC = () => {
   const [timeRange, setTimeRange] = useState<TimeRange>('thisMonth');
   const {get} = useAjax({showLoading:false,handleError:true});
-  const [x,setX] = useState('expenses');
+  const [kind,setKind] = useState('expenses');
 
   const generateStartAndEnd = ()=>{
     if(timeRange === 'thisMonth'){
@@ -28,9 +28,9 @@ export const StatisticsPage: FC = () => {
     }
   }
   const {start,end} =generateStartAndEnd();
-  const {data:items} = useSWR(`/api/v1/items/summary?happened_after=${start}&happened_before=${end}&kind=${x}&group_by=happen_at`,async (path)=>{
-    const response = await get<{groups:{happened_at:string,amount:number}[],total:number}>(path);
-    return response.data.groups.map((item,index)=>({x:item.happened_at,y:item.amount}))
+  const {data:items} = useSWR(`/api/v1/items/summary?happened_after=${start}&happened_before=${end}&kind=${kind}&group_by=happen_at`,async (path)=>{
+    const response = await get<{groups:{happen_at:string,amount:number}[],total:number}>(path);
+    return response.data.groups.map((item,index)=>({x:item.happen_at,y:item.amount}))
   });
 
   const data = [
@@ -64,8 +64,8 @@ export const StatisticsPage: FC = () => {
                   {text:'支出',value:'expenses'},
                   {text:'收入',value:'income'}
                 ]}
-                  value={x}
-                  onChange={value => setX(value)}
+                  value={kind}
+                  onChange={value => setKind(value)}
                   disableError
         />
       </div>
