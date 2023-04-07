@@ -1,5 +1,6 @@
-import * as React from 'react'
+
 import { Gradient } from '../components/Gradient'
+import useSWR from 'swr'
 import type { TimeRange } from '../components/TimeRangePicker'
 import { TimeRangePicker } from '../components/TimeRangePicker'
 import { TopNav } from '../components/TopNav'
@@ -7,42 +8,30 @@ import { LineChart } from '../components/LineChart'
 import { PieChart } from '../components/PieChart'
 import { RankChart } from '../components/RankChart'
 import { Input } from '../components/Input'
-import { useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { BackIcon } from '../components/BackIcon'
+import { useAjax } from '../lib/ajax'
+import { time } from '../lib/time'
 
-export const StatisticsPage: React.FC = () => {
-  const [timeRange, setTimeRange] = React.useState<TimeRange>('thisMonth')
-  const items = [
-    { data: '2000-01-01', value: 15000 },
-    { data: '2000-01-02', value: 1500 },
-    { data: '2000-01-03', value: 3500 },
-    { data: '2000-01-04', value: 4500 },
-    { data: '2000-01-05', value: 150 },
-    { data: '2000-01-06', value: 3500 },
-    { data: '2000-01-07', value: 4500 },
-    { data: '2000-01-08', value: 150 },
-    { data: '2000-01-09', value: 3500 },
-    { data: '2000-01-10', value: 4500 },
-    { data: '2000-01-11', value: 150 },
-    { data: '2000-01-12', value: 3500 },
-    { data: '2000-01-13', value: 4500 },
-    { data: '2000-01-14', value: 1500 },
-    { data: '2000-01-15', value: 3500 },
-    { data: '2000-01-16', value: 4500 },
-    { data: '2000-01-17', value: 150 },
-    { data: '2000-01-18', value: 3500 },
-    { data: '2000-01-19', value: 4500 },
-    { data: '2000-01-20', value: 4500 },
-    { data: '2000-01-21', value: 150 },
-    { data: '2000-01-22', value: 3500 },
-    { data: '2000-01-23', value: 4500 },
-    { data: '2000-01-24', value: 150 },
-    { data: '2000-01-25', value: 3500 },
-    { data: '2000-01-26', value: 4500 },
-    { data: '2000-01-27', value: 150 },
-    { data: '2000-01-28', value: 3500 },
-    { data: '2000-01-29', value: 4500 },
-  ].map(item => ({ x: item.data, y: item.value }))
+export const StatisticsPage: FC = () => {
+  const [timeRange, setTimeRange] = useState<TimeRange>('thisMonth');
+  const {get} = useAjax({showLoading:false,handleError:true});
+  const [x,setX] = useState('expenses');
+
+  const generateStartAndEnd = ()=>{
+    if(timeRange === 'thisMonth'){
+      const start = time().firstDayOfMonth.format('yyyy-MM-dd');
+      const end = time().lastDayOfMonth.add(1,'day').format('yyyy-MM-dd');
+      return {start,end}
+    }else{
+      return {start:"",end:""}
+    }
+  }
+  const {start,end} =generateStartAndEnd();
+  const {data:items} = useSWR(`/api/v1/items/summary?happened_after=${start}&happened_before=${end}&kind=${x}&group_by=happen_at`,async (path)=>{
+    const response = await get<{groups:{happened_at:string,amount:number}[],total:number}>(path);
+    return response.data.groups.map((item,index)=>({x:item.happened_at,y:item.amount}))
+  });
 
   const data = [
     { tag: { name: '衣服', sign: '😍' }, amount: 1500 },
@@ -55,7 +44,7 @@ export const StatisticsPage: React.FC = () => {
   const items2 = data.map(item => ({ x: item.tag.name, y: item.amount }))
 
   const items3 = data.map(item => ({ x: item.tag.name, y: item.tag.sign, z: item.amount }))
-  const [x,setX] = useState('expenses')
+ 
   return (
  <div>
     <Gradient>
