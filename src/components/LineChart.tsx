@@ -1,81 +1,76 @@
-
-import * as echarts from 'echarts'
-import * as React from 'react'
-
 import { useEffect, useRef } from 'react'
+import * as echarts from 'echarts'
+
 type Props = {
   className?: string
-  items?: { x: number | string; y: number }[]
+  items?: { x: number | string; y: number | string }[]
 }
 export const LineChart: React.FC<Props> = (props) => {
   const { className, items } = props
   const div = useRef<HTMLDivElement>(null)
   const xItems = items?.map(item => item.x)
   const yItems = items?.map(item => item.y)
+  const initialized = useRef(false)
   const myChart = useRef<echarts.ECharts>()
   useEffect(() => {
     if (!div.current) { return }
+    if (initialized.current) { return }
     myChart.current = echarts.init(div.current)
-    myChart.current.setOption({
+    initialized.current = true
+    const option: echarts.EChartsOption = {
       tooltip: {
-        trigger:'axis',
+        trigger: 'axis',
         show: true,
-        formatter:([{axisValue,data}]:any)=>{
+        formatter: ([{ axisValue, data }]: any) => {
           const parts = axisValue.split('-')
-          const label = parts[0] + '年' + parts[1] + '月' + parts[2] + '日'
-          const _data = data === null ? '无数据' : data;
-          return `${label}<br/>${_data}元`
+          const label = `${parts[0]}年${parts[1]}月${parts[2]}日`
+          const value = data === null ? '无数据' : `${data}元`
+          return `${label}<br/><div style="text-align: right;">${value}</div>`
         }
       },
       grid: {
         left: 16,
         top: 8,
-        right: 16,
-        bottom: 20
+        bottom: 24,
+        right: 16
       },
       xAxis: {
         type: 'category',
         data: xItems,
-        axisLabel: { // 操作x坐标
-          formatter(label: string) {
-            const _index = label.indexOf('-')
-            return label.slice(_index + 1)
-          }
-        }
+        axisLabel: {
+          formatter: (label: string) => label.slice(label.indexOf('-') + 1)
+        },
       },
       yAxis: {
         type: 'value',
         axisLabel: {
           show: false
-        }
+        },
       },
       series: [
         {
           data: yItems,
           type: 'line',
           itemStyle: {
-            // color: 'red'
           },
-          emphasis:{
-            itemStyle:{
-              color:'#009866'
+          emphasis: {
+            itemStyle: {
+              color: 'green'
             }
           }
         }
       ]
-    })
+    }
+    myChart.current.setOption(option)
   }, [])
-  useEffect(()=>{
-    myChart.current?.setOption({
-      xAxis: {
-        data: xItems
-      },
-      series: [
-        {
-          data: yItems,
-        }
-      ]
-    })
-  },[items])
-  return <div ref={div} className={className}></div>
+  useEffect(() => {
+    const option: echarts.EChartsOption = {
+      xAxis: { data: xItems, },
+      series: [{ data: yItems, }]
+    }
+    myChart.current?.setOption(option)
+  }, [items])
+  return (
+    <div ref={div} className={className}></div>
+  )
 }
