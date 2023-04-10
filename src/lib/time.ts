@@ -17,6 +17,7 @@ export const time = (p?: number | string | Date) => {
 }
 
 export class Time {
+  static DAY = 24 * 60 * 60 * 1000
   #date: Date
   constructor(p?: number | string | Date) {
     this.#date = p ? new Date(p) : new Date()
@@ -101,6 +102,10 @@ export class Time {
       value = k === 'month' ? value - 1 : value
       this.#date[methodName](value)
     })
+  }
+  removeTime() {
+    this.set({ hours: 0, minutes: 0, seconds: 0, ms: 0 })
+    return this
   }
   get year() {
     return this.parts.year
