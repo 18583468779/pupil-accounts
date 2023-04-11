@@ -9,17 +9,34 @@ import { TopNav } from '../components/TopNav'
 import { useMenuStore } from '../stores/useMenuStore'
 import { ItemsList } from './ItemsPage/ItemsList'
 import { ItemsSummary } from './ItemsPage/ItemsSummary'
-import { timeRangeToStartAndEnd } from '../lib/timeRangeToStartAndEnd'
-import { time } from '../lib/time'
+// import { timeRangeToStartAndEnd } from '../lib/timeRangeToStartAndEnd'
+import { Time, time } from '../lib/time'
 
 export const ItemsPage: React.FC = () => {
-  const [timeRange, setTimeRange] = useState<TimeRange>({
+  const [timeRange, _setTimeRange] = useState<TimeRange>({
     name:'thisMonth',
     start:time().firstDayOfMonth,
     end:time().lastDayOfMonth.add(1,'day')
-  })
+  });
+  const [outOfRange,setOutOfRange] = useState(false)
+  const setTimeRange = (t:TimeRange)=>{
+    //交换两个变量的值
+    if(t.start.timestamp > t.end.timestamp){
+      // const temp = t.start;
+      // t.start = t.end
+      // t.end =temp
+      [t.start,t.end] = [t.end,t.start]
+    }
+    if(t.end.timestamp - t.start.timestamp > Time.DAY * 365){
+      setOutOfRange(true)
+    }else{
+      setOutOfRange(false)
+    }
+    _setTimeRange(t)
+
+  }
   const { visible, setVisible } = useMenuStore()
-  const { start, end } = timeRangeToStartAndEnd(timeRange)
+  const { start, end } = timeRange
 
   return (
     <div>
@@ -30,10 +47,15 @@ export const ItemsPage: React.FC = () => {
         } />
       </Gradient>
       <TimeRangePicker selected={timeRange} onSelect={setTimeRange} />
-      <ItemsSummary />
-      <ItemsList start={start} end={end}/>
-      <AddItemFloatButton />
-      <TopMenu visible={visible} onClickMask={() => { setVisible(false) }} />
+      {outOfRange ? <div text-center p-32px m-t-23px>
+        自定义时间不能超过一年
+      </div> : <>
+        <ItemsSummary />
+        <ItemsList start={start} end={end}/>
+        <AddItemFloatButton />
+        <TopMenu visible={visible} onClickMask={() => { setVisible(false) }} />
+      </>}
+
     </div>
   )
 }

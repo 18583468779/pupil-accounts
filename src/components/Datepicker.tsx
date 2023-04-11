@@ -11,14 +11,14 @@ type Props = {
   onCancel?: () => void
   onConfirm?: (value: Date) => void
 }
-
+const getNow = ()=>time().set({hours:0,minutes:0,seconds:0,ms:0})
 export const Datepicker: React.FC<Props> = (props) => {
   const { start, end, value, onChange, onCancel, onConfirm } = props
   const [,update] = useState({}) // 强行state更新组件
-  const startTime = start ? time(start) : time().add(-10, 'year')
-  const endTime = end ? time(end) : time().add(10, 'year')
+  const startTime = start ? time(start) : getNow().add(-10, 'year')
+  const endTime = end ? time(end) : getNow().add(10, 'year')
   // const valueTime = value ? time(value) : time() //每次都重新渲染到当前年份，用useref解决
-  const valueTime = useRef(value ? time(value) : time())
+  const valueTime = useRef(value ? time(value) : getNow())
   const yearList = Array.from({ length: endTime.year - startTime.year + 1 }).map((_, index) => startTime.year + index)
   const monthList = Array.from({ length: 12 }).map((_, index) => index + 1)
   const dayList = Array.from({ length: valueTime.current.lastDayOfMonth.day }).map((_, index) => index + 1)
