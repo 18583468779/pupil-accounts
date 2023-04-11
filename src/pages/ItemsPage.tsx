@@ -50,7 +50,7 @@ export const ItemsPage: React.FC = () => {
       {outOfRange ? <div text-center p-32px m-t-23px>
         自定义时间不能超过一年
       </div> : <>
-        <ItemsSummary />
+        <ItemsSummary start={start} end={end}/>
         <ItemsList start={start} end={end}/>
         <AddItemFloatButton />
         <TopMenu visible={visible} onClickMask={() => { setVisible(false) }} />
