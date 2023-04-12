@@ -1,8 +1,7 @@
 import type { ChangeEvent, ReactNode } from 'react'
-import { EmojiInput } from './Ipunt/EmojiInput'
-import { SmsCodeInput } from './Ipunt/SmsCodeInput'
-import { DateInput } from './Ipunt/DateInput'
-
+import { DateInput } from './Input/DateInput'
+import { EmojiInput } from './Input/EmojiInput'
+import { SmsCodeInput } from './Input/SmsCodeInput'
 
 type Props = {
   label?: string | ReactNode

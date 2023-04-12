@@ -1,27 +1,27 @@
 import styled from 'styled-components'
 import useSWRInfinite from 'swr/infinite'
 import { useAjax } from '../../lib/ajax'
-import { Time } from '../../lib/time'
-
+import type { Time } from '../../lib/time'
 interface Props {
-  start:Time
-  end:Time
+  start: Time
+  end: Time
 }
 const Div = styled.div`
   padding: 16px;
   text-align: center;
 `
-
 export const ItemsList: React.FC<Props> = (props) => {
-  const {start,end} = props
-  const {get} = useAjax({})
+  const { start, end } = props
+  const { get } = useAjax()
   const getKey = (pageIndex: number, prev: Resources<Item>) => {
     if (prev) {
       const sendCount = (prev.pager.page - 1) * prev.pager.per_page + prev.resources.length
       const count = prev.pager.count
       if (sendCount >= count) { return null }
     }
-    return `/api/v1/items?page=${pageIndex + 1}&happened_after=${start.removeTime().isoString}&happened_before=${end.removeTime().isoString}`
+    return `/api/v1/items?page=${pageIndex + 1}&`
+      + `happened_after=${start.removeTime().isoString}&`
+      + `happened_before=${end.removeTime().isoString}`
   }
   const { data, error, size, setSize } = useSWRInfinite(
     getKey,
@@ -48,7 +48,7 @@ export const ItemsList: React.FC<Props> = (props) => {
         data.map(({ resources }) => {
           return resources.map(item =>
             <li key={item.id} grid grid-cols="[auto_1fr_auto]" grid-rows-2 px-16px py-8px gap-x-12px
-              border-b-1 b="#EEE">
+              border-b-1 b-solid b="#EEE">
               <div row-start-1 col-start-1 row-end-3 col-end-2 text-24px w-48px h-48px
                 bg="#D8D8D8" rounded="50%" flex justify-center items-center>
                 😘

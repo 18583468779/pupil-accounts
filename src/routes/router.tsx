@@ -13,11 +13,10 @@ import { Welcome4 } from '../pages/Welcome4'
 import { TagsNewPage } from '../pages/TagsNewPage'
 import { TagsEditPage } from '../pages/TagsEditPage'
 import { StatisticsPage } from '../pages/StatisticsPage'
-
+import { ItemsPageError } from '../pages/ItemsPageError'
 import { ErrorEmptyData, ErrorUnauthorized } from '../errors'
 import { ErrorPage } from '../pages/ErrorPage'
 import { ajax } from '../lib/ajax'
-import { ItemsPageError } from '../pages/itemsPageError'
 
 export const router = createBrowserRouter([
   { path: '/', element: <Root />, },

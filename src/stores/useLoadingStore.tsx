@@ -2,14 +2,13 @@ import create from 'zustand'
 
 interface Loading {
   visible: boolean
-  setVisible: (read: boolean) => void
+  setVisible: (visible: boolean) => void
 }
-
 export const useLoadingStore = create<Loading>((set, get) => (
   {
-    visible:false,
+    visible: false,
     setVisible: (visible: boolean) => {
-        set({visible})
+      set({ visible })
     },
   }
 ))
